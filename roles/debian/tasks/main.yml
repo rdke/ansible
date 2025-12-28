@@ -1,7 +1,7 @@
 - name: Install qemu-guest-agent
   ansible.builtin.apt:
     name: qemu-guest-agent
-    update_cache: yes
+    update_cache: true
 
 - name: Enable qemu-guest-agent
   ansible.builtin.systemd_service:
@@ -26,6 +26,7 @@
   when: debian_disable_lastlogin
   ansible.builtin.file:
     path: /root/.hushlogin
+    mode: "0644"
     state: touch
 
 - name: Set GRUB Timeout

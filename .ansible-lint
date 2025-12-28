@@ -1,0 +1,6 @@
+skip_list:
+  - package-latest
+
+warn_list:
+  - no-changed-when
+  - yaml[line-length]

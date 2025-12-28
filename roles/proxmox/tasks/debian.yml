@@ -45,20 +45,19 @@
       ipconfig0: "ip={{ proxmox_debian_ci_ipv4 }},gw={{ proxmox_debian_ci_ipv4_gw }},ip6={{ proxmox_debian_ci_ipv6 }},gw6={{ proxmox_debian_ci_ipv6_gw }}"
 
 - name: Import Debian disk (Shell due to Proxmox API restrictions)
-  ansible.builtin.shell: |
-   qm config {{ proxmox_debian_vmid }} | grep -q 'scsi1:' || qm importdisk {{ proxmox_debian_vmid }} /var/lib/vz/import/debian-13.qcow2 {{ proxmox_storage }}
+  ansible.builtin.shell: set -o pipefail && qm config {{ proxmox_debian_vmid }} | grep -q 'scsi1:' || qm importdisk {{ proxmox_debian_vmid }} /var/lib/vz/import/debian-13.qcow2 {{ proxmox_storage }}
 
-# Not available due to Proxmox API restrictions
-#- name: Import disk in the future
-#  community.proxmox.proxmox_disk:
-#    api_user: "{{ proxmox_api_user }}"
-#    api_token_id: "{{ proxmox_api_token_id }}"
-#    api_token_secret: "{{ proxmox_api_token_secret }}"
-#    api_host: "{{ proxmox_api_host }}"
-#    vmid: "{{ proxmox_debian_vmid }}"
-#    import_from: /var/lib/vz/import/debian-13.qcow2
-#    disk: scsi1
-#    storage: local-zfs
+#  Not available due to Proxmox API restrictions
+# - name: Import disk in the future
+#   community.proxmox.proxmox_disk:
+#     api_user: "{{ proxmox_api_user }}"
+#     api_token_id: "{{ proxmox_api_token_id }}"
+#     api_token_secret: "{{ proxmox_api_token_secret }}"
+#     api_host: "{{ proxmox_api_host }}"
+#     vmid: "{{ proxmox_debian_vmid }}"
+#     import_from: /var/lib/vz/import/debian-13.qcow2
+#     disk: scsi1
+#     storage: local-zfs
 
 - name: Assign Debian disk to scsi1
   community.proxmox.proxmox_kvm:
