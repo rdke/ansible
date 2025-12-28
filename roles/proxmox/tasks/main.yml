@@ -7,13 +7,12 @@
     state: present
     update_cache: true
 
-- name: Add Windows Server Template
-  when: proxmox_windowsserver_install_template
-  ansible.builtin.include_tasks:
-    file: windowsserver.yml
-
 - name: Add Debian Template
   when: proxmox_debian_install_template
   ansible.builtin.include_tasks:
     file: debian.yml
 
+- name: Add Windows Server Template
+  when: proxmox_windowsserver_install_template
+  ansible.builtin.include_tasks:
+    file: windowsserver.yml
