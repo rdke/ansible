@@ -4,6 +4,5 @@ proxmox_debian_vmid: 999
 proxmox_debian_cloud_image_url: "https://cdimage.debian.org/images/cloud/trixie/latest/debian-13-generic-amd64.qcow2"
 # Replace with new SHA512 from here: https://cdimage.debian.org/images/cloud/trixie/latest/SHA512SUMS
 proxmox_debian_cloud_image_sha512: "1882f2d0debfb52254db1b0fc850d222fa68470a644a914d181f744ac1511a6caa1835368362db6dee88504a13c726b3ee9de0e43648353f62e90e075f497026"
-proxmox_debian_storage: "local-zfs"
-proxmox_debian_size: "32G"
+proxmox_debian_size: "32"
 proxmox_debian_bridge: "vmbr0"

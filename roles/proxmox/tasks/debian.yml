@@ -81,7 +81,7 @@
     vmid: "{{ proxmox_debian_vmid }}"
     disk: scsi1
     state: resized
-    size: "{{ proxmox_debian_size }}"
+    size: "{{ proxmox_debian_size }}G"
 
 - name: Remove downloaded image
   ansible.builtin.file:
