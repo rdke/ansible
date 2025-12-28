@@ -1,11 +1,11 @@
-- name: Download Debian cloud image to /tmp
+- name: Download Debian cloud image
   ansible.builtin.get_url:
     url: "{{ proxmox_debian_cloud_image_url }}"
     dest: "/var/lib/vz/import/debian-13.qcow2"
     checksum: "sha512:{{ proxmox_debian_cloud_image_sha512 }}"
     mode: "0644"
 
-- name: Create and configure Debian 13 VM/Template with cloud-init
+- name: Create and configure Debian 13 with cloud-init
   community.proxmox.proxmox_kvm:
     api_user: "{{ proxmox_api_user }}"
     api_token_id: "{{ proxmox_api_token_id }}"
@@ -43,7 +43,7 @@
     ipconfig:
       ipconfig0: "ip={{ proxmox_debian_ci_ipv4 }},gw={{ proxmox_debian_ci_ipv4_gw }},ip6={{ proxmox_debian_ci_ipv6 }},gw6={{ proxmox_debian_ci_ipv6_gw }}"
 
-- name: Import Debian disk into VM/Template via shell if it does not yet exist (due to API restrictions)
+- name: Import Debian disk (Shell due to Proxmox API restrictions)
   ansible.builtin.shell: |
    qm config {{ proxmox_debian_vmid }} | grep -q 'scsi1:' || qm importdisk {{ proxmox_debian_vmid }} /var/lib/vz/import/debian-13.qcow2 {{ proxmox_debian_storage }}
 
@@ -72,7 +72,7 @@
     scsi:
       scsi1: "{{ proxmox_debian_storage }}:vm-{{ proxmox_debian_vmid }}-disk-1,cache=writeback,discard=on,ssd=1"
 
-- name: Resize attached disk
+- name: Resize scsi1 disk
   community.proxmox.proxmox_disk:
     api_user: "{{ proxmox_api_user }}"
     api_token_id: "{{ proxmox_api_token_id }}"
