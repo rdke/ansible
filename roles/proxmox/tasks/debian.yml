@@ -26,7 +26,7 @@
     boot: c
     bootdisk: scsi1
     efidisk0:
-      storage: "{{ proxmox_debian_storage }}"
+      storage: "{{ proxmox_storage }}"
       format: "raw"
       efitype: "4m"
       pre_enrolled_keys: 1
@@ -34,7 +34,7 @@
       net0: "virtio,bridge={{ proxmox_debian_bridge }},firewall=1"
     scsihw: "virtio-scsi-single"
     scsi:
-      scsi0: "{{ proxmox_debian_storage }}:cloudinit,format=raw"
+      scsi0: "{{ proxmox_storage }}:cloudinit,format=raw"
     ciupgrade: 1
     ciuser: "{{ proxmox_debian_ci_user }}"
     sshkeys: "{{ proxmox_debian_ci_sshkeys | join('\n') }}"
@@ -45,7 +45,7 @@
 
 - name: Import Debian disk (Shell due to Proxmox API restrictions)
   ansible.builtin.shell: |
-   qm config {{ proxmox_debian_vmid }} | grep -q 'scsi1:' || qm importdisk {{ proxmox_debian_vmid }} /var/lib/vz/import/debian-13.qcow2 {{ proxmox_debian_storage }}
+   qm config {{ proxmox_debian_vmid }} | grep -q 'scsi1:' || qm importdisk {{ proxmox_debian_vmid }} /var/lib/vz/import/debian-13.qcow2 {{ proxmox_storage }}
 
 # Not available due to Proxmox API restrictions
 #- name: Import disk in the future
@@ -70,7 +70,7 @@
     update: true
     update_unsafe: true
     scsi:
-      scsi1: "{{ proxmox_debian_storage }}:vm-{{ proxmox_debian_vmid }}-disk-1,cache=writeback,discard=on,ssd=1"
+      scsi1: "{{ proxmox_storage }}:vm-{{ proxmox_debian_vmid }}-disk-1,cache=writeback,discard=on,ssd=1"
 
 - name: Resize scsi1 disk
   community.proxmox.proxmox_disk:
