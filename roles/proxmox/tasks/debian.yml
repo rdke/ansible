@@ -23,6 +23,7 @@
     cpu: host
     onboot: 1
     balloon: 0
+    template: true
     boot: c
     bootdisk: scsi1
     efidisk0:
