@@ -10,7 +10,7 @@ Configure role-based variables in roles/x/vars/main.yml. You can also override t
 
 ## Structure
 
-Keeping it as simple as possible, the playbooks directory simply runs roles from the roles directory.
+Keeping it as simple as possible, the playbooks in the root directory simply run roles from the roles directory.
 
 ## Usage
 
