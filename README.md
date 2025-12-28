@@ -14,4 +14,4 @@ Keeping it as simple as possible, the playbooks directory simply runs roles from
 
 ## Usage
 
-Run `ansible-playbook -i inventories/example/hosts playbooks/proxmox.yml` to run the Proxmox role.
+Run `ansible-playbook -i inventories/example proxmox.yml` to run the Proxmox role.
