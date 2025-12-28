@@ -1,0 +1,17 @@
+proxmox_api_user: "root@pam"
+proxmox_api_token_id: "ansible"
+proxmox_api_token_secret: "12345678-123456789-1234-1234567890ab"
+proxmox_api_host: "ds-de-01.example.org"
+proxmox_node: "ds-de-01"
+proxmox_debian_ci_user: "root"
+proxmox_debian_ci_sshkeys:
+  - "ssh-ed25519 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+proxmox_debian_ci_nameservers:
+  - "1.1.1.1"
+  - "1.0.0.1"
+  - "2606:4700:4700::1111"
+proxmox_debian_ci_searchdomain: "example.org"
+proxmox_debian_ci_ipv4: "x.x.x.x/24"
+proxmox_debian_ci_ipv4_gw: "x.x.x.x"
+proxmox_debian_ci_ipv6: "xxxx:xxxx:xxxx:xxxx::x/64"
+proxmox_debian_ci_ipv6_gw: "xxxx:xxxx:xxxx:xxxx::x"

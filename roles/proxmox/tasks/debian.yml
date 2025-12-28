@@ -1,0 +1,89 @@
+- name: Download Debian cloud image to /tmp
+  ansible.builtin.get_url:
+    url: "{{ proxmox_debian_cloud_image_url }}"
+    dest: "/var/lib/vz/import/debian-13.qcow2"
+    checksum: "sha512:{{ proxmox_debian_cloud_image_sha512 }}"
+    mode: "0644"
+
+- name: Create and configure Debian 13 VM/Template with cloud-init
+  community.proxmox.proxmox_kvm:
+    api_user: "{{ proxmox_api_user }}"
+    api_token_id: "{{ proxmox_api_token_id }}"
+    api_token_secret: "{{ proxmox_api_token_secret }}"
+    api_host: "{{ proxmox_api_host }}"
+    node: "{{ proxmox_node }}"
+    vmid: "{{ proxmox_debian_vmid }}"
+    name: "debian-13"
+    memory: 4096
+    cores: 6
+    ostype: "l26"
+    machine: "q35"
+    bios: "ovmf"
+    agent: "enabled=1"
+    cpu: host
+    onboot: 1
+    balloon: 0
+    boot: c
+    bootdisk: scsi1
+    efidisk0:
+      storage: "{{ proxmox_debian_storage }}"
+      format: "raw"
+      efitype: "4m"
+      pre_enrolled_keys: 1
+    net:
+      net0: "virtio,bridge={{ proxmox_debian_bridge }},firewall=1"
+    scsihw: "virtio-scsi-single"
+    scsi:
+      scsi0: "{{ proxmox_debian_storage }}:cloudinit,format=raw"
+    ciupgrade: 1
+    ciuser: "{{ proxmox_debian_ci_user }}"
+    sshkeys: "{{ proxmox_debian_ci_sshkeys | join('\n') }}"
+    nameservers: "{{ proxmox_debian_ci_nameservers }}"
+    searchdomains: "{{ proxmox_debian_ci_searchdomain }}"
+    ipconfig:
+      ipconfig0: "ip={{ proxmox_debian_ci_ipv4 }},gw={{ proxmox_debian_ci_ipv4_gw }},ip6={{ proxmox_debian_ci_ipv6 }},gw6={{ proxmox_debian_ci_ipv6_gw }}"
+
+- name: Import Debian disk into VM/Template via shell if it does not yet exist (due to API restrictions)
+  ansible.builtin.shell: |
+   qm config {{ proxmox_debian_vmid }} | grep -q 'scsi1:' || qm importdisk {{ proxmox_debian_vmid }} /var/lib/vz/import/debian-13.qcow2 {{ proxmox_debian_storage }}
+
+# Not available due to Proxmox API restrictions
+#- name: Import disk in the future
+#  community.proxmox.proxmox_disk:
+#    api_user: "{{ proxmox_api_user }}"
+#    api_token_id: "{{ proxmox_api_token_id }}"
+#    api_token_secret: "{{ proxmox_api_token_secret }}"
+#    api_host: "{{ proxmox_api_host }}"
+#    vmid: "{{ proxmox_debian_vmid }}"
+#    import_from: /var/lib/vz/import/debian-13.qcow2
+#    disk: scsi1
+#    storage: local-zfs
+
+- name: Assign Debian disk to scsi1
+  community.proxmox.proxmox_kvm:
+    api_user: "{{ proxmox_api_user }}"
+    api_token_id: "{{ proxmox_api_token_id }}"
+    api_token_secret: "{{ proxmox_api_token_secret }}"
+    api_host: "{{ proxmox_api_host }}"
+    node: "{{ proxmox_node }}"
+    vmid: "{{ proxmox_debian_vmid }}"
+    update: true
+    update_unsafe: true
+    scsi:
+      scsi1: "{{ proxmox_debian_storage }}:vm-{{ proxmox_debian_vmid }}-disk-1,cache=writeback,discard=on,ssd=1"
+
+- name: Resize attached disk
+  community.proxmox.proxmox_disk:
+    api_user: "{{ proxmox_api_user }}"
+    api_token_id: "{{ proxmox_api_token_id }}"
+    api_token_secret: "{{ proxmox_api_token_secret }}"
+    api_host: "{{ proxmox_api_host }}"
+    vmid: "{{ proxmox_debian_vmid }}"
+    disk: scsi1
+    state: resized
+    size: "{{ proxmox_debian_size }}"
+
+- name: Remove downloaded image
+  ansible.builtin.file:
+    path: "/var/lib/vz/import/debian-13.qcow2"
+    state: absent

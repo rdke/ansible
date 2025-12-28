@@ -1,0 +1,45 @@
+- name: Install qemu-guest-agent
+  ansible.builtin.apt:
+    name: qemu-guest-agent
+    update_cache: yes
+
+- name: Enable qemu-guest-agent
+  ansible.builtin.systemd_service:
+    name: qemu-guest-agent.service
+    state: started
+    enabled: true
+
+- name: Don't display license information after logging in (/etc/motd)
+  when: debian_disable_motd
+  ansible.builtin.copy:
+    dest: /etc/motd
+    content: ""
+    mode: "0644"
+
+- name: Don't show kernel version after logging in (/etc/update-motd.d/10-uname)
+  when: debian_disable_motd
+  ansible.builtin.file:
+    path: /etc/update-motd.d/10-uname
+    state: absent
+
+- name: Don't display last login
+  when: debian_disable_lastlogin
+  ansible.builtin.file:
+    path: /root/.hushlogin
+    state: touch
+
+- name: Set GRUB Timeout
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: "^GRUB_TIMEOUT="
+    line: "GRUB_TIMEOUT={{ debian_grub_timeout }}"
+  notify: "Update GRUB"
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Upgrade apt packages
+  ansible.builtin.package:
+    name: "*"
+    state: latest

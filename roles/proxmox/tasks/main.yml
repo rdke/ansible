@@ -1,0 +1,13 @@
+---
+- name: Ensure python3-proxmoxer and requests are installed
+  ansible.builtin.apt:
+    name:
+      - python3-proxmoxer
+      - python3-requests
+    state: present
+    update_cache: true
+
+- name: Add Debian Template
+  when: proxmox_debian_install_template
+  ansible.builtin.include_tasks:
+    file: debian.yml

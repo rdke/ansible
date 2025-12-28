@@ -1,0 +1,27 @@
+services:
+  nginx:
+    image: nginx:stable-alpine-slim
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    command: "/bin/sh -c 'trap exit TERM; while :; do sleep 24h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    volumes:
+      - ./nginx:/etc/nginx
+      - ./letsencrypt:/etc/letsencrypt
+      - ./acme-challenge:/var/www/.well-known/acme-challenge
+    networks:
+      - proxy
+
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    entrypoint: []
+    command: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --non-interactive; sleep 24h; wait $${!}; done'"
+    volumes:
+      - ./letsencrypt:/etc/letsencrypt
+      - ./acme-challenge:/var/www/.well-known/acme-challenge
+
+networks:
+  proxy:
+    external: true
