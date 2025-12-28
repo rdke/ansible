@@ -35,7 +35,7 @@
     state: directory
     mode: "0755"
 
-- name: Download DH parameters
+- name: Download dhparams from Mozilla
   ansible.builtin.get_url:
     url: https://ssl-config.mozilla.org/ffdhe2048.txt
     dest: "/srv/nginx/nginx/dhparams"
