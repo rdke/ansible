@@ -6,3 +6,11 @@ proxmox_debian_cloud_image_url: "https://cdimage.debian.org/images/cloud/trixie/
 proxmox_debian_cloud_image_sha512: "1882f2d0debfb52254db1b0fc850d222fa68470a644a914d181f744ac1511a6caa1835368362db6dee88504a13c726b3ee9de0e43648353f62e90e075f497026"
 proxmox_debian_size: "32"
 proxmox_debian_bridge: "vmbr0"
+
+proxmox_windowsserver_install_template: true
+proxmox_windowsserver_iso_url: "https://oemsoc.download.prss.microsoft.com/dbazure/X23-81958_26100.1742.240906-0331.ge_release_svc_refresh_SERVER_OEMRET_x64FRE_en-us.iso_909fa35d-ba98-407d-9fef-8df76f75e133?t=34b8db0f-439b-497c-86ce-ec7ceb898bb7&P1=102816956391&P2=601&P3=2&P4=pG1WoVpBKlyWcmfj%2bt1gYgkTsP4At28ch8mG7vIQm%2fT4elz5v2ZQ3eKAN8%2fFjb1yaa4npBaABURtnI8YmrDv8p0VJmYpLCIUQ0FHEFR4IFiPgtvzwAAI8oNdiEl%2b2uM7MN8Gaju8BvIVgHRl%2fRxq0HFgrFoEGmvHZU4jY0RFsYAaHliUinDUzdVfT0IPwyWqNUJXZTSfguyphv8XZx8OQsBy3zwBp7tNHsKl36ZO2JdZK%2fyPY7QTpAr5ccazUPEa40ALhYRBJXxlQb1F0OeO7kHhW7DKK5D4Wpt5WbpjFn8MqcZBX3%2fQI6WAwzDSKIck7jYL7bYdl2ufoMRrFZrxxw%3d%3d"
+# Replace with new SHA512 from here: https://files.rg-adguard.net/search
+proxmox_windowsserver_iso_sha512: "66a96031566f2e5b9fdaa4c4506799ab0b86b50f7acf6f6192e8d35775326e4a455b43ced293155222be570d9ea15b7c9adf0562d99bd7b8f4746f7639de8150"
+proxmox_windowsserver_vmid: 998
+proxmox_windowsserver_size: "64"
+proxmox_windowsserver_bridge: "vmbr0"

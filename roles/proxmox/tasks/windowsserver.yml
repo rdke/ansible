@@ -1,0 +1,47 @@
+- name: Download Windows Server ISO
+  ansible.builtin.get_url:
+    url: "{{ proxmox_windowsserver_iso_url }}"
+    dest: "/var/lib/vz/template/iso/windows_server_2025.iso"
+    checksum: "sha512:{{ proxmox_windowsserver_iso_sha512 }}"
+    mode: "0644"
+
+- name: Download VirtIO drivers ISO
+  ansible.builtin.get_url:
+    url: "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso"
+    dest: "/var/lib/vz/template/iso/virtio-win.iso"
+    mode: "0644"
+
+- name: Create Windows Server
+  community.proxmox.proxmox_kvm:
+    api_user: "{{ proxmox_api_user }}"
+    api_token_id: "{{ proxmox_api_token_id }}"
+    api_token_secret: "{{ proxmox_api_token_secret }}"
+    api_host: "{{ proxmox_api_host }}"
+    node: "{{ proxmox_node }}"
+    vmid: "{{ proxmox_windowsserver_vmid }}"
+    name: "windowsserver"
+    memory: 4096
+    cores: 6
+    ostype: "win11"
+    machine: "q35"
+    bios: "ovmf"
+    agent: "enabled=1"
+    template: true
+    cpu: host
+    onboot: 1
+    balloon: 0
+    boot: c
+    bootdisk: scsi1
+    net:
+      net0: "virtio,bridge={{ proxmox_windowsserver_bridge }},firewall=1"
+    ide:
+      ide0: "local:iso/virtio-win.iso,media=cdrom"
+      ide1: "local:iso/windows_server_2025.iso,media=cdrom"
+    efidisk0:
+      storage: "{{ proxmox_storage }}"
+      format: "raw"
+      efitype: "4m"
+      pre_enrolled_keys: 1
+    scsihw: "virtio-scsi-single"
+    scsi:
+      scsi0: "{{ proxmox_storage }}:{{ proxmox_windowsserver_size }},format=raw"
