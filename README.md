@@ -1,6 +1,6 @@
 # Ansible
 
-A collection of more or less polished Ansible roles for automation of various Debian-based services.
+A collection of more or less polished Ansible roles for automation of Debian, Proxmox and Docker-based services.
 
 ## Configuration
 
@@ -11,6 +11,8 @@ Configure role-based variables in roles/x/vars/main.yml. You can also override t
 ## Structure
 
 Keeping it as simple as possible, the playbooks in the root directory simply run roles from the roles directory.
+
+Docker projects are created in /srv by default. You can change the tasks if you wish to use /opt or other directories.
 
 ## Usage
 
