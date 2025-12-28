@@ -1,6 +1,6 @@
 - name: Download Debian cloud image
   ansible.builtin.get_url:
-    url: "{{ proxmox_debian_cloud_image_url }}"
+    url: "https://cdimage.debian.org/images/cloud/trixie/latest/debian-13-generic-amd64.qcow2"
     dest: "/var/lib/vz/import/debian-13.qcow2"
     checksum: "sha512:{{ proxmox_debian_cloud_image_sha512 }}"
     mode: "0644"
