@@ -1,10 +1,11 @@
+---
 proxmox:
   hosts:
-    ds-de-01:
-      ansible_host: x.x.x.x
-      ansible_user: root
+    x.x.x.x:
+    x.x.x.x:
 web:
   hosts:
-    vm-web-01:
-      ansible_host: x.x.x.x
-      ansible_user: root
+    x.x.x.x:
+    x.x.x.x:
+vars:
+  ansible_user: root
